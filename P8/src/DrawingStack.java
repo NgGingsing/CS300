@@ -33,9 +33,70 @@
 //
 /////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 
-public class DrawingStack {
-    public static void main(String[] args) {
+import java.util.Iterator;
 
+public class DrawingStack implements StackADT<DrawingChange>
+{
+    Node<DrawingChange> top;
+    int size;
+
+    public DrawingStack()
+    {
+        top = null;
+        size = 0;
+    }
+
+    @Override
+    public void push(DrawingChange element) throws IllegalArgumentException
+    {
+        Node<DrawingChange> newNode = new Node<>(element, top);
+        top = newNode;
+        size++;
+    }
+
+    @Override
+    public DrawingChange pop()
+    {
+        if (isEmpty())
+        {
+            throw new NullPointerException(
+                    "WARNING: The Stack is empty. Unable " + "to execute a pop operation."
+            );
+        }
+        DrawingChange remove = top.getData();
+        top = top.getNext();
+        size--;
+        return remove;
+    }
+
+    @Override
+    public DrawingChange peek()
+    {
+        if (isEmpty())
+        {
+            throw new NullPointerException(
+                    "WARNING: The Stack is empty. Unable " + "to execute a pop operation."
+            );
+        }
+        return top.getData();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return top == null;
+    }
+
+    @Override
+    public int size()
+    {
+        return size;
+    }
+
+    @Override
+    public Iterator<DrawingChange> iterator()
+    {
+        return new DrawingStackIterator(top);
     }
 }
 

@@ -33,10 +33,33 @@
 //
 /////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 
-public class DrawingStackIterator {
-    public static void main(String[] args) {
+import java.util.Iterator;
 
+public class DrawingStackIterator implements Iterator<DrawingChange>
+{
+    private Node<DrawingChange> next;
+
+    public DrawingStackIterator(Node<DrawingChange> top)
+    {
+        next = top;
     }
+
+    @Override
+    public boolean hasNext()
+    {
+        return next.getNext() == null;
+    }
+
+    @Override
+    public DrawingChange next()
+    {
+        if (!hasNext())
+            return null;
+        Node<DrawingChange> current = next;
+        next = next.getNext();
+        return current.getData();
+    }
+
 }
 
 

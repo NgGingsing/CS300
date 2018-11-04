@@ -33,8 +33,7 @@
 //
 /////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 
-public class AsciiArt {
-    public static void main(String[] args) {
+public class AsciiArt
+{
 
-    }
 }

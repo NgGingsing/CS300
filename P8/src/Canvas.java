@@ -43,31 +43,72 @@ public class Canvas {
     private final DrawingStack undoStack; // store previous changes for undo
     private final DrawingStack redoStack; // store undone changes for redo
 
-    public Canvas(int width, int height) {
-
+    public Canvas(int width, int height)
+    {
+        this.width = width;
+        this.height = height;
+        drawingArray = new char[height][width];
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                drawingArray[i][j] = ' ';
+            }
+        }
+        undoStack = new DrawingStack();
+        redoStack = new DrawingStack();
     } // Constructor. Throws IllegalArgumentException if width or height is 0 or negative
     // A Canvas is initially blank (use the space ' ' character)
 
-    public void draw(int row, int col, char c) {
-
+    public void draw(int row, int col, char c)
+    {
+        if ((row < 0 || row > height ) || (col < 0 || col > width))
+        {
+            throw new IllegalArgumentException("WARNING: the position is out of canvas!");
+        }
+        char old = drawingArray[row][col];
+        DrawingChange drawingChange = new DrawingChange(row, col, old, c);
+        undoStack.push(drawingChange);
+        if (!redoStack.isEmpty())
+            redoStack.pop();
+        drawingArray[row][col] = c;
     } // Draw a character at the given position
     // This method should throw an IllegalArgumentException if the drawing position is outside the canvas
     // If that position is already marked with a different character, overwrite it.
     // After making a new change, add a matching DrawingChange to the undoStack so that we can undo if needed.
     // After making a new change, the redoStack should be empty.
 
-    public boolean undo() {
-
+    public boolean undo()
+    {
+        DrawingChange recentDrawingChange = undoStack.pop();
+        draw(recentDrawingChange.x, recentDrawingChange.y, recentDrawingChange.prevChar);
+        redoStack.push(recentDrawingChange);
+        return true;
     } // Undo the most recent drawing change. Return true if successful. False otherwise.
     // An undone DrawingChange should be added to the redoStack so that we can redo if needed.
 
-    public boolean redo() {
-
+    public boolean redo()
+    {
+        DrawingChange recentUndoneDrawingChange = redoStack.pop();
+        draw(recentUndoneDrawingChange.x, recentUndoneDrawingChange.y, recentUndoneDrawingChange.newChar);
+        undoStack.push(recentUndoneDrawingChange);
+        return true;
     } // Redo the most recent undone drawing change. Return true if successful. False otherwise.
     // A redone DrawingChange should be added (back) to the undoStack so that we can undo again if needed.
 
-    public String toString() {
-
+    public String toString()
+    {
+        String stringCanvas = "";
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                stringCanvas += drawingArray[i][j];
+            }
+            if (i != width - 1)
+                stringCanvas += System.lineSeparator();
+        }
+        return stringCanvas;
     } // Return a printable string version of the Canvas.
     /* Format example: [_ is blank. Use System.lineSeparator() to put a newline character between rows]
      * X___X
@@ -76,4 +117,10 @@ public class Canvas {
      * _X_X_
      * X___X
      */
+
+    public void printDrawing()
+    {
+        System.out.print(this.toString());
+    }
+
 }

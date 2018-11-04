@@ -33,8 +33,15 @@
 //
 /////////////////////////////// 80 COLUMNS WIDE ///////////////////////////////
 
-public class AsciiTest {
-    public static void main(String[] args) {
+public class AsciiTest
+{
+    public static boolean testStackPushPeek()
+    {
+        return true;
+    }
 
+    public static boolean runStackTestSuite()
+    {
+        return true;
     }
 }
